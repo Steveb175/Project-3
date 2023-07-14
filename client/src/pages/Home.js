@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { useState } from "react";
-=======
 import React, { useState, useEffect } from "react";
->>>>>>> d2ef1bbdeaab998a306dae3e163f96bb689738ea
 import { Button, Input } from "antd";
 import { useQuery } from "@apollo/client";
 import WorkoutList from "../components/WorkoutList";
@@ -52,11 +48,7 @@ const Home = () => {
     }
   };
 
-<<<<<<< HEAD
   // Need to implement authentication so that only logged in users can see the add workout toggle button====withAuth
-=======
-  // Need to implement authentication so that only logged in users can see the add workout toggle button
->>>>>>> d2ef1bbdeaab998a306dae3e163f96bb689738ea
   // Execute the query and retrieve the data
   // const { loading, data } = useQuery(QUERY_WORKOUTS);
   // const workouts = data?.workouts || [];
