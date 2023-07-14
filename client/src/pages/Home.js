@@ -48,7 +48,7 @@ const Home = () => {
     }
   };
 
-  // Need to implement authentication so that only logged in users can see the add workout toggle button
+  // Need to implement authentication so that only logged in users can see the add workout toggle button====withAuth
   // Execute the query and retrieve the data
   // const { loading, data } = useQuery(QUERY_WORKOUTS);
   // const workouts = data?.workouts || [];

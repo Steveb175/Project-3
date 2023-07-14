@@ -39,7 +39,6 @@ const typeDefs = gql`
     saveWorkout(workoutData: WorkoutInput!): User
     deleteWorkout(workoutId: ID!): User
   }
-
 `;
 
 module.exports = typeDefs;
