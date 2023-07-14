@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 import React, { useState } from "react";
 import { Button, Input } from "antd";
 import { useQuery } from "@apollo/client";
@@ -36,4 +34,3 @@ const Home = () => {
 };
 
 export default Home;
->>>>>>> Stashed changes
