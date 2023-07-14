@@ -23,13 +23,7 @@ const typeDefs = gql`
   }
 
   type Query {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-    workouts: [Workout]
-=======
     Profile(username: String!): User
-=======
-    profile(username: String!): User
   }
 
   input WorkoutInput {
@@ -37,7 +31,6 @@ const typeDefs = gql`
     instructions: String
     muscle: String
     image: String
->>>>>>> main
   }
 
   type Mutation {
@@ -45,10 +38,6 @@ const typeDefs = gql`
     createUser(username: String!, email: String!, password: String!): Auth
     saveWorkout(workoutData: WorkoutInput!): User
     deleteWorkout(workoutId: ID!): User
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> main
   }
 `;
 
