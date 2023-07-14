@@ -23,7 +23,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    Profile(username: String!): User
+    me(username: String!): User
   }
 
   input WorkoutInput {
