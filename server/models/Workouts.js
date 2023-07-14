@@ -9,6 +9,9 @@ const workoutSchema = new Schema({
   },
   muscle: {
     type: String
+  },
+  image: {
+    type: String
   }
 });
 

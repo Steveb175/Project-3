@@ -1,5 +1,14 @@
 [
-    {
-        "name": 
-    }
+  {
+    "name": "First workout",
+    "instructions": "Jump once",
+    "muscle": "legs",
+    "image": "test image"
+  },
+  {
+    "name": "2nd workout",
+    "instructions": "Jump twice",
+    "muscle": "legs",
+    "image": "test image2"
+  }
 ]
