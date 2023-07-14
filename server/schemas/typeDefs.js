@@ -23,7 +23,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    me(username: String!): User
+    profile(username: String!): User
   }
 
   input WorkoutInput {
@@ -39,7 +39,6 @@ const typeDefs = gql`
     saveWorkout(workoutData: WorkoutInput!): User
     deleteWorkout(workoutId: ID!): User
   }
-
 `;
 
 module.exports = typeDefs;
