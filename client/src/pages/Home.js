@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Button, Input } from "antd";
-import { useQuery } from "@apollo/client";
+
 import WorkoutList from "../components/WorkoutList";
 import WorkoutForm from "../components/WorkoutForm";
 import Auth from "../utils/auth";
 // import { } from '../utils/localStorage';
-import { useQuery, useMutation } from '@apollo/client';
-import { SAVE_WORKOUT } from '../utils/mutations';
+import { useQuery, useMutation } from "@apollo/client";
+import { SAVE_WORKOUT } from "../utils/mutations";
 
 // Define your query constant here
 // const QUERY_WORKOUTS = ...;
@@ -28,9 +28,11 @@ const Home = () => {
   };
   // NEED TO ADD MORE TO THIS -  WILL BE A DROP DOWN MENU
 
-  const handleSaveWorkout = async (workoutId) => {
+  const handleSaveWorkout = async workoutId => {
     // find the workout in `workouts` state by the matching id
-    const workoutToSave = workouts.find((workout) => workout.workoutId === workoutId);
+    const workoutToSave = workouts.find(
+      workout => workout.workoutId === workoutId
+    );
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -39,7 +41,7 @@ const Home = () => {
 
     try {
       const { data } = await saveWorkout({
-        variables: { workoutId: { ...workoutToSave } },
+        variables: { workoutId: { ...workoutToSave } }
       });
 
       setSavedWorkoutIds([...savedWorkoutIds, workoutToSave.workoutId]);
@@ -48,7 +50,7 @@ const Home = () => {
     }
   };
 
-  // Need to implement authentication so that only logged in users can see the add workout toggle button====withAuth
+  // Need to implement authentication so that only logged in users can see the add workout toggle button
   // Execute the query and retrieve the data
   // const { loading, data } = useQuery(QUERY_WORKOUTS);
   // const workouts = data?.workouts || [];
