@@ -15,6 +15,7 @@ import Signup from "./components/SignupForm";
 import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 
 // GraphQL API endpoint
 const httpLink = createHttpLink({ uri: "/graphql" });
