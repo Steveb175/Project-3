@@ -56,16 +56,54 @@ const Home = () => {
   // const workouts = data?.workouts || [];
 
   return (
-    <main>
-      <div>
+    <>
+      <div className="text-light bg-dark pt-5">
+        <Container>
         <h1>Welcome to Workout Customizer</h1>
         <Button type="primary" onClick={handleToggleForm}>
           {showForm ? "Hide Form" : "Create New Workout"}
         </Button>
         {showForm && <WorkoutForm />}
+        </Container>
       </div>
-      <WorkoutList />
-    </main>
+      {/* <WorkoutList /> */}
+
+      <Container>
+      <h2 className='pt-5'> 
+      {workouts.length
+            ? `Viewing ${workouts.length} results:`
+            : 'Search for a book to begin'}
+        </h2>
+        <Row>
+          {workouts.map((workout) => {
+            return (
+          <Col md="4">
+            <Card key={workout.workoutId} border='dark'>
+              {workout.image ? (
+                <Card.Img src={workout.image} alt={`The cover for ${workout.name}`} variant='top' />   
+              ) : null}
+              <Card.Body>
+                <Card.Title>{workout.name}</Card.Title>
+                <p className='small'>Muscle: {workout.muscle}</p>
+                <Card.Text>{workout.instructions}</Card.Text>
+                {Auth.loggedIn() && (
+                  <Button
+                    disabled={savedWorkoutIds?.some((savedWorkoutId) => savedWorkoutId === workout.workoutId)}
+                    className='btn-block btn-info'
+                    onClick={() => handleSaveWorkout(workout.workoutId)}>
+                    {savedWorkoutIds?.some((savedWorkoutId) => savedWorkoutId === workout.workoutId)
+                      ? 'This workout has already been saved!'
+                      : 'Save this Workout!'}
+                  </Button>
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
+          );
+        })}
+        </Row>
+      </Container>
+    </>
   );
 };
 
