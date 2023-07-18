@@ -4,7 +4,7 @@ import { Button, Input } from "antd";
 import WorkoutList from "../components/WorkoutList";
 import WorkoutForm from "../components/WorkoutForm";
 import Auth from "../utils/auth";
-// import { } from '../utils/localStorage';
+import { saveWorkoutIds, getSavedWorkoutIds } from '../utils/localStorage';
 import { useQuery, useMutation } from "@apollo/client";
 import { SAVE_WORKOUT } from "../utils/mutations";
 
