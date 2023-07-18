@@ -7,7 +7,7 @@ import {
   Col
 } from 'react-bootstrap';
 import Auth from "../utils/auth";
-// import { } from '../utils/localStorage';
+import { removeWorkoutId } from '../utils/localStorage';
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_ME } from '../utils/queries';
 import { DELETE_WORKOUT } from '../utils/mutations';
@@ -91,7 +91,7 @@ const Profile = () => {
                   {workout.image ? <Card.Img src={workout.image} alt={`The cover for ${workout.name}`} variant="top" /> : null}
                   <Card.Body>
                     <Card.Title>{workout.name}</Card.Title>
-                    <p className="small">Muscle: {workout.muscle}</p>
+                    <p className="small">Category: {workout.category}</p>
                     <Card.Text>{workout.instructions}</Card.Text>
                     <Button className="btn-block btn-danger" onClick={() => handleDeleteWorkout(workout.workoutId)}>
                       Delete this Workout!
