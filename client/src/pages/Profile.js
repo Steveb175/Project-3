@@ -57,16 +57,53 @@ const Profile = () => {
   }
 
   return (
-    <main>
-      <div>
-        <h4>Profile</h4>
-        {user ? (
-          <p>Welcome, {username}!</p>
-        ) : (
-          <p>Please log in to view your profile.</p>
-        )}
-      </div>
-    </main>
+    // <main>
+    //   <div>
+    //     <h4>Profile</h4>
+    //     {user ? (
+    //       <p>Welcome, {username}!</p>
+    //     ) : (
+    //       <p>Please log in to view your profile.</p>
+    //     )}
+    //   </div>
+    // </main>
+    <>
+    <div className="text-light bg-dark pt-5">
+      <Container>
+        <h1>Profile</h1>
+        <h2>Welcome, {username}!</h2>
+        <h3>Here's a list of your workouts:</h3>
+      </Container>
+    </div>
+      <Container>
+        <h2 className="pt-5">
+          {userData.workouts?.length
+            ? `Viewing ${userData.workouts.length} saved ${
+                userData.workouts.length === 1 ? 'workout' : 'workouts'
+              }:`
+            : 'You have no saved workouts!'}
+        </h2>
+        <Row>
+          {userData.workouts?.map((workout) => {
+            return (
+              <Col md="4">
+                <Card key={workout.workoutId} border="dark">
+                  {workout.image ? <Card.Img src={workout.image} alt={`The cover for ${workout.name}`} variant="top" /> : null}
+                  <Card.Body>
+                    <Card.Title>{workout.name}</Card.Title>
+                    <p className="small">Muscle: {workout.muscle}</p>
+                    <Card.Text>{workout.instructions}</Card.Text>
+                    <Button className="btn-block btn-danger" onClick={() => handleDeleteWorkout(workout.workoutId)}>
+                      Delete this Workout!
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+      </Container>
+    </>
   );
 };
 
