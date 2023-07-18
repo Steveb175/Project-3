@@ -13,7 +13,7 @@ const typeDefs = gql`
     _id: ID
     name: String!
     instructions: String
-    muscle: String
+    category: String
     image: String
   }
 
@@ -29,7 +29,7 @@ const typeDefs = gql`
   input WorkoutInput {
     name: String!
     instructions: String
-    muscle: String
+    category: String
     image: String
   }
 
