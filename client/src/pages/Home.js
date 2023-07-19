@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
-// import { Button, Input } from "antd";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import WorkoutList from "../components/WorkoutList";
 import WorkoutForm from "../components/WorkoutForm";
 import Auth from "../utils/auth";
-import { saveWorkoutIds, getSavedWorkoutIds } from '../utils/localStorage';
+import { saveWorkoutIds, getSavedWorkoutIds } from "../utils/localStorage";
 import { useQuery, useMutation } from "@apollo/client";
 import { SAVE_WORKOUT } from "../utils/mutations";
 import { searchWorkouts } from "../utils/API";
@@ -17,7 +16,7 @@ const Home = () => {
   const [showForm, setShowForm] = useState(false);
   // const [workouts, setWorkouts] = useState([]);
   const [searchedWorkouts, setSearchedWorkouts] = useState([]);
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
 
   const [savedWorkoutIds, setSavedWorkoutIds] = useState(getSavedWorkoutIds());
   const [saveWorkout, { error }] = useMutation(SAVE_WORKOUT);
@@ -36,11 +35,10 @@ const Home = () => {
     }
 
     try {
-
       const response = await searchWorkouts(searchInput);
       // needs changed to fit workout data
       if (!response.ok) {
-        throw new Error('something went wrong!');
+        throw new Error("something went wrong!");
       }
 
       const { items } = await response.json();
@@ -50,16 +48,17 @@ const Home = () => {
         name: workout.volumeInfo.name,
         category: workout.volumeInfo.category,
         instructions: workout.volumeInfo.instructions,
-        image: workout.volumeInfo.imageLinks?.thumbnail || '',
+        image: workout.volumeInfo.imageLinks?.thumbnail || "",
       }));
 
-      const uniqueWorkouts = Array.from(new Set(workoutData.map((workout) => workout.workoutId)))
-        .map((workoutId) => {
-          return workoutData.find((workout) => workout.workoutId === workoutId);
-        });
+      const uniqueWorkouts = Array.from(
+        new Set(workoutData.map((workout) => workout.workoutId))
+      ).map((workoutId) => {
+        return workoutData.find((workout) => workout.workoutId === workoutId);
+      });
 
       setSearchedWorkouts(uniqueWorkouts);
-      setSearchInput('');
+      setSearchInput("");
     } catch (err) {
       console.error(err);
     }
@@ -68,10 +67,10 @@ const Home = () => {
   };
   // NEED TO ADD MORE TO THIS -  WILL BE A DROP DOWN MENU
 
-  const handleSaveWorkout = async workoutId => {
+  const handleSaveWorkout = async (workoutId) => {
     // find the workout in `searchedWorkouts` state by the matching id
     const workoutToSave = searchedWorkouts.find(
-      workout => workout.workoutId === workoutId
+      (workout) => workout.workoutId === workoutId
     );
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -81,7 +80,7 @@ const Home = () => {
 
     try {
       const { data } = await saveWorkout({
-        variables: { workoutId: { ...workoutToSave } }
+        variables: { workoutId: { ...workoutToSave } },
       });
 
       setSavedWorkoutIds([...savedWorkoutIds, workoutToSave.workoutId]);
@@ -97,32 +96,30 @@ const Home = () => {
 
   return (
     <>
-    
-      <div className="text-light bg-dark pt-5">
+      <div className="text-light bg-dark pt-5 text-center">
         <Container>
-        <h1>Welcome to Workout Customizer</h1>
-        <h2>Select for a workout below</h2>
+          <h1>Welcome to Workout Customizer</h1>
+          <h2>Select for a workout below</h2>
 
-        <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Select Workout
-          </Dropdown.Toggle>
+          <Dropdown>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              Workout Category
+            </Dropdown.Toggle>
 
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Chest</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Back</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Legs</Dropdown.Item>
-            <Dropdown.Item href="#/action-4">Arms</Dropdown.Item>
-            <Dropdown.Item href="#/action-5">Shoulders</Dropdown.Item>
-            <Dropdown.Item href="#/action-6">Abs</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Chest</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Back</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Legs</Dropdown.Item>
+              <Dropdown.Item href="#/action-4">Arms</Dropdown.Item>
+              <Dropdown.Item href="#/action-5">Shoulders</Dropdown.Item>
+              <Dropdown.Item href="#/action-6">Abs</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Container>
       </div>
 
       {/* <WorkoutList /> */}
-{/* 
+      {/* 
       <Container>
       <h2 className='pt-5'> 
       {workouts.length
