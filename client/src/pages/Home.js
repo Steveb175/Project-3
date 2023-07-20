@@ -8,6 +8,7 @@ import { saveWorkoutIds, getSavedWorkoutIds } from "../utils/localStorage";
 import { useQuery, useMutation } from "@apollo/client";
 import { SAVE_WORKOUT } from "../utils/mutations";
 import { searchWorkouts } from "../utils/API";
+import { QUERY_CATEGORIES, QUERY_CATEGORY } from "../utils/queries";
 
 // Define your query constant here
 // const QUERY_WORKOUTS = ...;
@@ -21,13 +22,16 @@ const Home = () => {
   const [savedWorkoutIds, setSavedWorkoutIds] = useState(getSavedWorkoutIds());
   const [saveWorkout, { error }] = useMutation(SAVE_WORKOUT);
 
+  const { loading, data : data_categories } = useQuery(QUERY_CATEGORIES);
+  console.log(data_categories);
+
   // set up useEffect hook to save `savedWorkoutIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveWorkoutIds(savedWorkoutIds);
   });
 
-  const handleToggleForm = async (event) => {
+  const handleToggleForm = async event => {
     event.preventDefault();
 
     if (!searchInput) {
@@ -43,18 +47,18 @@ const Home = () => {
 
       const { items } = await response.json();
 
-      const workoutData = items.map((workout) => ({
+      const workoutData = items.map(workout => ({
         workoutId: workout.id,
         name: workout.volumeInfo.name,
         category: workout.volumeInfo.category,
         instructions: workout.volumeInfo.instructions,
-        image: workout.volumeInfo.imageLinks?.thumbnail || "",
+        image: workout.volumeInfo.imageLinks.thumbnail || ""
       }));
 
       const uniqueWorkouts = Array.from(
-        new Set(workoutData.map((workout) => workout.workoutId))
-      ).map((workoutId) => {
-        return workoutData.find((workout) => workout.workoutId === workoutId);
+        new Set(workoutData.map(workout => workout.workoutId))
+      ).map(workoutId => {
+        return workoutData.find(workout => workout.workoutId === workoutId);
       });
 
       setSearchedWorkouts(uniqueWorkouts);
@@ -67,10 +71,10 @@ const Home = () => {
   };
   // NEED TO ADD MORE TO THIS -  WILL BE A DROP DOWN MENU
 
-  const handleSaveWorkout = async (workoutId) => {
+  const handleSaveWorkout = async workoutId => {
     // find the workout in `searchedWorkouts` state by the matching id
     const workoutToSave = searchedWorkouts.find(
-      (workout) => workout.workoutId === workoutId
+      workout => workout.workoutId === workoutId
     );
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -80,7 +84,7 @@ const Home = () => {
 
     try {
       const { data } = await saveWorkout({
-        variables: { workoutId: { ...workoutToSave } },
+        variables: { workoutId: { ...workoutToSave } }
       });
 
       setSavedWorkoutIds([...savedWorkoutIds, workoutToSave.workoutId]);
@@ -107,12 +111,9 @@ const Home = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Chest</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Back</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Legs</Dropdown.Item>
-              <Dropdown.Item href="#/action-4">Arms</Dropdown.Item>
-              <Dropdown.Item href="#/action-5">Shoulders</Dropdown.Item>
-              <Dropdown.Item href="#/action-6">Abs</Dropdown.Item>
+              { data_categories?.categories.map((category) => (
+                <Dropdown.Item key={category._id} href="#/action-1">{category.name}</Dropdown.Item>
+              ))}
             </Dropdown.Menu>
           </Dropdown>
         </Container>

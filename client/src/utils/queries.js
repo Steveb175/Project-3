@@ -9,9 +9,42 @@ export const QUERY_ME = gql`
             savedWorkouts {
                 name
                 instructions
-                muscle
+                category
                 image
             }
         }
     }
 `;
+
+export const QUERY_CATEGORIES = gql`
+    query categories {
+        categories {
+            _id
+            name
+            workouts {
+                _id
+                name
+                instructions
+                category
+                image
+            }
+        }
+    }
+`;
+
+export const QUERY_CATEGORY = gql`
+    query category($name: String!) {
+        category(name: $name) {
+            _id
+            name
+            workouts {
+                _id
+                name
+                instructions
+                category
+                image
+            }
+        }
+    }
+`;
+

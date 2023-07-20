@@ -13,13 +13,10 @@ const workoutSchema = new Schema({
   category: {
     type: Schema.Types.ObjectId,
     ref: "Category",
-    required: true,
   },
   image: {
     type: String,
   },
 });
 
-const Workout = mongoose.model("Workout", workoutSchema);
-
-module.exports = Workout;
+module.exports = workoutSchema;
