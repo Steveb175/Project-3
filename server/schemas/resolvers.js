@@ -1,4 +1,4 @@
-const { Workout, User } = require("../models");
+const { Workout, User, Category } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
 
@@ -12,9 +12,13 @@ const resolvers = {
         return userData;
       }
       throw new AuthenticationError("Not logged in");
-    }
-    // create a query that will search workouts by category
-
+    },
+    categories: async () => { 
+      return await Category.find({});
+    },
+    category: async (parent, { name }) => {
+      return await Category.findOne({ name }).populate("workouts");
+    },
   },
   Mutation: {
     login: async (parent, { email, password }) => {
