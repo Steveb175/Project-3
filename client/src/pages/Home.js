@@ -1,102 +1,54 @@
 import React, { useState, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import WorkoutList from "../components/WorkoutList";
-import WorkoutForm from "../components/WorkoutForm";
 import Auth from "../utils/auth";
 import { saveWorkoutIds, getSavedWorkoutIds } from "../utils/localStorage";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { SAVE_WORKOUT } from "../utils/mutations";
-import { searchWorkouts } from "../utils/API";
 import { QUERY_CATEGORIES, QUERY_CATEGORY } from "../utils/queries";
-
-// Define your query constant here
-// const QUERY_WORKOUTS = ...;
 
 const Home = () => {
   const [showForm, setShowForm] = useState(false);
-  // const [workouts, setWorkouts] = useState([]);
   const [searchedWorkouts, setSearchedWorkouts] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-
   const [savedWorkoutIds, setSavedWorkoutIds] = useState(getSavedWorkoutIds());
-  const [saveWorkout, { error }] = useMutation(SAVE_WORKOUT);
 
-  const { loading, data : data_categories } = useQuery(QUERY_CATEGORIES);
+  const [getCategory, { loading: categoryLoading, data: data_category }] = useLazyQuery(QUERY_CATEGORY);
+  const [saveWorkout, { error }] = useMutation(SAVE_WORKOUT);
+  const { loading: categoriesLoading, data: data_categories } = useQuery(QUERY_CATEGORIES);
+
   console.log(data_categories);
+  console.log(data_category);
 
   // set up useEffect hook to save `savedWorkoutIds` list to localStorage on component unmount
-  // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveWorkoutIds(savedWorkoutIds);
   });
 
-  const handleToggleForm = async event => {
-    event.preventDefault();
-
-    if (!searchInput) {
-      return false;
-    }
-
-    try {
-      const response = await searchWorkouts(searchInput);
-      // needs changed to fit workout data
-      if (!response.ok) {
-        throw new Error("something went wrong!");
-      }
-
-      const { items } = await response.json();
-
-      const workoutData = items.map(workout => ({
-        workoutId: workout.id,
-        name: workout.volumeInfo.name,
-        category: workout.volumeInfo.category,
-        instructions: workout.volumeInfo.instructions,
-        image: workout.volumeInfo.imageLinks.thumbnail || ""
-      }));
-
-      const uniqueWorkouts = Array.from(
-        new Set(workoutData.map(workout => workout.workoutId))
-      ).map(workoutId => {
-        return workoutData.find(workout => workout.workoutId === workoutId);
-      });
-
-      setSearchedWorkouts(uniqueWorkouts);
-      setSearchInput("");
-    } catch (err) {
-      console.error(err);
-    }
-
-    setShowForm(!showForm);
-  };
-  // NEED TO ADD MORE TO THIS -  WILL BE A DROP DOWN MENU
-
   const handleSaveWorkout = async workoutId => {
-    // find the workout in `searchedWorkouts` state by the matching id
-    const workoutToSave = searchedWorkouts.find(
-      workout => workout.workoutId === workoutId
-    );
-    const token = Auth.loggedIn() ? Auth.getToken() : null;
+    // // find the workout in `searchedWorkouts` state by the matching id
+    // const workoutToSave = searchedWorkouts.find(
+    //   workout => workout.workoutId === workoutId
+    // );
+    // const token = Auth.loggedIn() ? Auth.getToken() : null;
 
-    if (!token) {
-      return false;
-    }
+    // if (!token) {
+    //   return false;
+    // }
 
-    try {
-      const { data } = await saveWorkout({
-        variables: { workoutId: { ...workoutToSave } }
-      });
+    // try {
+    //   const { data } = await saveWorkout({
+    //     variables: { workoutId: { ...workoutToSave } }
+    //   });
 
-      setSavedWorkoutIds([...savedWorkoutIds, workoutToSave.workoutId]);
-    } catch (err) {
-      console.error(err);
-    }
+    //   setSavedWorkoutIds([...savedWorkoutIds, workoutToSave.workoutId]);
+    // } catch (err) {
+    //   console.error(err);
+    // }
   };
 
   // Need to implement authentication so that only logged in users can see the add workout toggle button
-  // Execute the query and retrieve the data
-  // const { loading, data } = useQuery(QUERY_WORKOUTS);
-  // const workouts = data?.workouts || [];
+  // NEED TO ADD BACK IN
 
   return (
     <>
@@ -112,50 +64,49 @@ const Home = () => {
 
             <Dropdown.Menu>
               { data_categories?.categories.map((category) => (
-                <Dropdown.Item key={category._id} href="#/action-1">{category.name}</Dropdown.Item>
+                 <Dropdown.Item
+                    key={category._id}
+                    value={category.name}
+                    onClick={() => getCategory({ variables: { name: category.name } })}>
+                    {category.name}
+                  </Dropdown.Item>
               ))}
             </Dropdown.Menu>
           </Dropdown>
         </Container>
       </div>
 
-      {/* <WorkoutList /> */}
-      {/* 
-      <Container>
-      <h2 className='pt-5'> 
-      {workouts.length
-            ? `Viewing ${workouts.length} results:`
-            : 'Search for a book to begin'}
-        </h2>
-        <Row>
-          {workouts.map((workout) => {
-            return (
-          <Col md="4">
-            <Card key={workout.workoutId} border='dark'>
-              {workout.image ? (
-                <Card.Img src={workout.image} alt={`The cover for ${workout.name}`} variant='top' />   
-              ) : null}
-              <Card.Body>
-                <Card.Title>{workout.name}</Card.Title>
-                <p className='small'>Category: {workout.category}</p>
-                <Card.Text>{workout.instructions}</Card.Text>
-                {Auth.loggedIn() && (
-                  <Button
-                    disabled={savedWorkoutIds?.some((savedWorkoutId) => savedWorkoutId === workout.workoutId)}
-                    className='btn-block btn-info'
-                    onClick={() => handleSaveWorkout(workout.workoutId)}>
-                    {savedWorkoutIds?.some((savedWorkoutId) => savedWorkoutId === workout.workoutId)
-                      ? 'This workout has already been saved!'
-                      : 'Save this Workout!'}
-                  </Button>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-          );
-        })}
-        </Row>
-      </Container> */}
+        {/* Display the workouts from the selected category */}
+      <div>
+        <Container>
+          <Row>
+          {data_category?.category?.workouts.map(workout => (
+             <Col md="4">
+              <Card key={workout._id} border='dark'>
+                {workout.image ? (
+                  <Card.Img src={workout.image} alt={`The cover for ${workout.name}`} variant='top' />
+                ) : null}
+                <Card.Body>
+                  <Card.Title>{workout.name}</Card.Title>
+                  <p className='small'>Category: {workout.category}</p>
+                  <Card.Text>{workout.instructions}</Card.Text>
+                  {Auth.loggedIn() && (
+                    <Button
+                      disabled={savedWorkoutIds?.some((savedWorkoutId) => savedWorkoutId === workout._id)}
+                      className='btn-block btn-info'
+                      onClick={() => handleSaveWorkout(workout._id)}>
+                       {savedWorkoutIds?.some((savedWorkoutId) => savedWorkoutId === workout._id)
+                        ? 'This workout has already been saved!'
+                        : 'Save this Workout!'}
+                    </Button>
+                  )}
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+          </Row>
+        </Container>
+       </div>
     </>
   );
 };
