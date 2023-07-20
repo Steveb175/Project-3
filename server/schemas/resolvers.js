@@ -13,6 +13,8 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in");
     }
+    // create a query that will search workouts by category
+
   },
   Mutation: {
     login: async (parent, { email, password }) => {
