@@ -27,7 +27,7 @@ const Home = () => {
     return () => saveWorkoutIds(savedWorkoutIds);
   });
 
-  const handleToggleForm = async (event) => {
+  const handleToggleForm = async event => {
     event.preventDefault();
 
     if (!searchInput) {
@@ -43,18 +43,18 @@ const Home = () => {
 
       const { items } = await response.json();
 
-      const workoutData = items.map((workout) => ({
+      const workoutData = items.map(workout => ({
         workoutId: workout.id,
         name: workout.volumeInfo.name,
         category: workout.volumeInfo.category,
         instructions: workout.volumeInfo.instructions,
-        image: workout.volumeInfo.imageLinks?.thumbnail || "",
+        image: workout.volumeInfo.imageLinks.thumbnail || ""
       }));
 
       const uniqueWorkouts = Array.from(
-        new Set(workoutData.map((workout) => workout.workoutId))
-      ).map((workoutId) => {
-        return workoutData.find((workout) => workout.workoutId === workoutId);
+        new Set(workoutData.map(workout => workout.workoutId))
+      ).map(workoutId => {
+        return workoutData.find(workout => workout.workoutId === workoutId);
       });
 
       setSearchedWorkouts(uniqueWorkouts);
@@ -67,10 +67,10 @@ const Home = () => {
   };
   // NEED TO ADD MORE TO THIS -  WILL BE A DROP DOWN MENU
 
-  const handleSaveWorkout = async (workoutId) => {
+  const handleSaveWorkout = async workoutId => {
     // find the workout in `searchedWorkouts` state by the matching id
     const workoutToSave = searchedWorkouts.find(
-      (workout) => workout.workoutId === workoutId
+      workout => workout.workoutId === workoutId
     );
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -80,7 +80,7 @@ const Home = () => {
 
     try {
       const { data } = await saveWorkout({
-        variables: { workoutId: { ...workoutToSave } },
+        variables: { workoutId: { ...workoutToSave } }
       });
 
       setSavedWorkoutIds([...savedWorkoutIds, workoutToSave.workoutId]);
