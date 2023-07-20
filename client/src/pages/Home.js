@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import WorkoutList from "../components/WorkoutList";
-import WorkoutForm from "../components/WorkoutForm";
+
 import Auth from "../utils/auth";
 import { saveWorkoutIds, getSavedWorkoutIds } from "../utils/localStorage";
 import { useQuery, useMutation } from "@apollo/client";
@@ -22,7 +21,7 @@ const Home = () => {
   const [savedWorkoutIds, setSavedWorkoutIds] = useState(getSavedWorkoutIds());
   const [saveWorkout, { error }] = useMutation(SAVE_WORKOUT);
 
-  const { loading, data : data_categories } = useQuery(QUERY_CATEGORIES);
+  const { loading, data: data_categories } = useQuery(QUERY_CATEGORIES);
   console.log(data_categories);
 
   // set up useEffect hook to save `savedWorkoutIds` list to localStorage on component unmount
@@ -111,8 +110,10 @@ const Home = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              { data_categories?.categories.map((category) => (
-                <Dropdown.Item key={category._id} href="#/action-1">{category.name}</Dropdown.Item>
+              {data_categories?.categories.map(category => (
+                <Dropdown.Item key={category._id} href="#/action-1">
+                  {category.name}
+                </Dropdown.Item>
               ))}
             </Dropdown.Menu>
           </Dropdown>
