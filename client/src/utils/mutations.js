@@ -33,7 +33,7 @@ export const SAVE_WORKOUT = gql`
       savedWorkouts {
         name
         instructions
-        muscle
+        category
         image
       }
     }
@@ -49,7 +49,7 @@ export const DELETE_WORKOUT = gql`
       savedWorkouts {
         name
         instructions
-        muscle
+        category
         image
       }
     }

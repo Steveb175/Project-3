@@ -17,6 +17,12 @@ const typeDefs = gql`
     image: String
   }
 
+  type Category {
+    _id: ID
+    name: String!
+    workouts: [Workout]
+  }
+
   type Auth {
     token: ID!
     user: User
@@ -24,6 +30,8 @@ const typeDefs = gql`
 
   type Query {
     me(username: String!): User
+    category(name: String!): Category
+    categories: [Category]
   }
 
   input WorkoutInput {
@@ -40,5 +48,7 @@ const typeDefs = gql`
     deleteWorkout(workoutId: ID!): User
   }
 `;
+
+// we probably dont need input WorkoutInput 
 
 module.exports = typeDefs;
