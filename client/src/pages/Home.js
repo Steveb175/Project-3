@@ -20,35 +20,35 @@ const Home = () => {
   const { loading: categoriesLoading, data: data_categories } =
     useQuery(QUERY_CATEGORIES);
 
-  console.log(data_categories);
-  console.log(data_category);
+  // console.log(data_categories);
+  // console.log(data_category);
 
   // set up useEffect hook to save `savedWorkoutIds` list to localStorage on component unmount
   useEffect(() => {
     return () => saveWorkoutIds(savedWorkoutIds);
   });
 
-  const handleSaveWorkout = async (workoutId) => {
-    // // find the workout in `searchedWorkouts` state by the matching id
-    // const workoutToSave = searchedWorkouts.find(
-    //   workout => workout.workoutId === workoutId
-    // );
-    // const token = Auth.loggedIn() ? Auth.getToken() : null;
-    // if (!token) {
-    //   return false;
-    // }
-    // try {
-    //   const { data } = await saveWorkout({
-    //     variables: { workoutId: { ...workoutToSave } }
-    //   });
-    //   setSavedWorkoutIds([...savedWorkoutIds, workoutToSave.workoutId]);
-    // } catch (err) {
-    //   console.error(err);
-    // }
-  };
+  const handleSaveWorkout = async (name, category, instructions, image, id) => {
+    const workoutData = { name, category, instructions, image };
+    // get token
+    const token = Auth.loggedIn() ? Auth.getToken() : null;
 
-  // Need to implement authentication so that only logged in users can see the add workout toggle button
-  // NEED TO ADD BACK IN
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const { data } = await saveWorkout({
+        variables: { workoutData }
+      });
+
+      console.log(data);
+      // if workout successfully saves to user's account, save workout id to state
+      setSavedWorkoutIds([...savedWorkoutIds, id]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <>
@@ -83,39 +83,31 @@ const Home = () => {
       <div className="bg-dark pt-3 pb-3">
         <Container>
           <Row>
-            {data_category?.category?.workouts.map((workout) => (
-              <Col md="4">
-                <Card key={workout._id} border="dark" className="cardClass">
-                  {workout.image ? (
-                    <Card.Img
-                      src={workout.image}
-                      alt={`The cover for ${workout.name}`}
-                      variant="top"
-                    />
-                  ) : null}
-                  <Card.Body>
-                    <Card.Title>{workout.name}</Card.Title>
-                    <p className="small">Category: {workout.category}</p>
-                    <Card.Text>{workout.instructions}</Card.Text>
-                    {Auth.loggedIn() && (
-                      <Button
-                        disabled={savedWorkoutIds?.some(
-                          (savedWorkoutId) => savedWorkoutId === workout._id
-                        )}
-                        className="btn-block btn-info"
-                        onClick={() => handleSaveWorkout(workout._id)}
-                      >
-                        {savedWorkoutIds?.some(
-                          (savedWorkoutId) => savedWorkoutId === workout._id
-                        )
-                          ? "This workout has already been saved!"
-                          : "Save this Workout!"}
-                      </Button>
-                    )}
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
+          {data_category?.category?.workouts.map(workout => (
+             <Col key={workout._id} md="4">
+              <Card border='dark'>
+                {workout.image ? (
+                  <Card.Img src={workout.image} alt={`The cover for ${workout.name}`} variant='top' />
+                ) : null}
+                <Card.Body>
+                  <Card.Title>Name: {workout.name}</Card.Title>
+                  <p className='small'>Category: {data_category.category.name}</p>
+                  <Card.Text>Instructions: {workout.instructions}</Card.Text>
+                  {Auth.loggedIn() && (
+                    <Button
+                      disabled={savedWorkoutIds?.some((savedWorkoutId) => savedWorkoutId === workout._id)}
+                      className='btn-block btn-info'
+                      onClick={() => handleSaveWorkout(workout.name, workout.category, workout.instructions, workout.image, workout._id)}>
+                       {savedWorkoutIds?.some((savedWorkoutId) => savedWorkoutId === workout._id)
+                        ? 'This workout has already been saved!'
+                        : 'Save this Workout!'}
+                    </Button>
+                  )}
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+
           </Row>
         </Container>
       </div>
