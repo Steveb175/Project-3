@@ -63,6 +63,7 @@ const Home = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
+
               { data_categories?.categories.map((category) => (
                  <Dropdown.Item
                     key={category._id}
