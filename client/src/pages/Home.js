@@ -6,6 +6,7 @@ import { saveWorkoutIds, getSavedWorkoutIds } from "../utils/localStorage";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { SAVE_WORKOUT } from "../utils/mutations";
 import { QUERY_CATEGORIES, QUERY_CATEGORY } from "../utils/queries";
+import "./index.css";
 
 const Home = () => {
   const [showForm, setShowForm] = useState(false);
@@ -13,9 +14,11 @@ const Home = () => {
   const [searchInput, setSearchInput] = useState("");
   const [savedWorkoutIds, setSavedWorkoutIds] = useState(getSavedWorkoutIds());
 
-  const [getCategory, { loading: categoryLoading, data: data_category }] = useLazyQuery(QUERY_CATEGORY);
+  const [getCategory, { loading: categoryLoading, data: data_category }] =
+    useLazyQuery(QUERY_CATEGORY);
   const [saveWorkout, { error }] = useMutation(SAVE_WORKOUT);
-  const { loading: categoriesLoading, data: data_categories } = useQuery(QUERY_CATEGORIES);
+  const { loading: categoriesLoading, data: data_categories } =
+    useQuery(QUERY_CATEGORIES);
 
   console.log(data_categories);
   console.log(data_category);
@@ -25,22 +28,19 @@ const Home = () => {
     return () => saveWorkoutIds(savedWorkoutIds);
   });
 
-  const handleSaveWorkout = async workoutId => {
+  const handleSaveWorkout = async (workoutId) => {
     // // find the workout in `searchedWorkouts` state by the matching id
     // const workoutToSave = searchedWorkouts.find(
     //   workout => workout.workoutId === workoutId
     // );
     // const token = Auth.loggedIn() ? Auth.getToken() : null;
-
     // if (!token) {
     //   return false;
     // }
-
     // try {
     //   const { data } = await saveWorkout({
     //     variables: { workoutId: { ...workoutToSave } }
     //   });
-
     //   setSavedWorkoutIds([...savedWorkoutIds, workoutToSave.workoutId]);
     // } catch (err) {
     //   console.error(err);
@@ -63,51 +63,62 @@ const Home = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-
-              { data_categories?.categories.map((category) => (
-                 <Dropdown.Item
-                    key={category._id}
-                    value={category.name}
-                    onClick={() => getCategory({ variables: { name: category.name } })}>
-                    {category.name}
-                  </Dropdown.Item>
+              {data_categories?.categories.map((category) => (
+                <Dropdown.Item
+                  key={category._id}
+                  value={category.name}
+                  onClick={() =>
+                    getCategory({ variables: { name: category.name } })
+                  }
+                >
+                  {category.name}
+                </Dropdown.Item>
               ))}
             </Dropdown.Menu>
           </Dropdown>
         </Container>
       </div>
 
-        {/* Display the workouts from the selected category */}
-      <div>
+      {/* Display the workouts from the selected category */}
+      <div className="bg-dark pt-3 pb-3">
         <Container>
           <Row>
-          {data_category?.category?.workouts.map(workout => (
-             <Col md="4">
-              <Card key={workout._id} border='dark'>
-                {workout.image ? (
-                  <Card.Img src={workout.image} alt={`The cover for ${workout.name}`} variant='top' />
-                ) : null}
-                <Card.Body>
-                  <Card.Title>{workout.name}</Card.Title>
-                  <p className='small'>Category: {workout.category}</p>
-                  <Card.Text>{workout.instructions}</Card.Text>
-                  {Auth.loggedIn() && (
-                    <Button
-                      disabled={savedWorkoutIds?.some((savedWorkoutId) => savedWorkoutId === workout._id)}
-                      className='btn-block btn-info'
-                      onClick={() => handleSaveWorkout(workout._id)}>
-                       {savedWorkoutIds?.some((savedWorkoutId) => savedWorkoutId === workout._id)
-                        ? 'This workout has already been saved!'
-                        : 'Save this Workout!'}
-                    </Button>
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
+            {data_category?.category?.workouts.map((workout) => (
+              <Col md="4">
+                <Card key={workout._id} border="dark" className="cardClass">
+                  {workout.image ? (
+                    <Card.Img
+                      src={workout.image}
+                      alt={`The cover for ${workout.name}`}
+                      variant="top"
+                    />
+                  ) : null}
+                  <Card.Body>
+                    <Card.Title>{workout.name}</Card.Title>
+                    <p className="small">Category: {workout.category}</p>
+                    <Card.Text>{workout.instructions}</Card.Text>
+                    {Auth.loggedIn() && (
+                      <Button
+                        disabled={savedWorkoutIds?.some(
+                          (savedWorkoutId) => savedWorkoutId === workout._id
+                        )}
+                        className="btn-block btn-info"
+                        onClick={() => handleSaveWorkout(workout._id)}
+                      >
+                        {savedWorkoutIds?.some(
+                          (savedWorkoutId) => savedWorkoutId === workout._id
+                        )
+                          ? "This workout has already been saved!"
+                          : "Save this Workout!"}
+                      </Button>
+                    )}
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
           </Row>
         </Container>
-       </div>
+      </div>
     </>
   );
 };
