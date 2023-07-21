@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
+require("dotenv").config({ path: "../.env" });
 
-// NEED TO ADD .ENV FILE WITH SECRET AT SOME POINT
-const secret = "Will-be-changed-to-env-variable";
+const secret = process.env.SECRET;
 const expiration = "2h";
 
 module.exports = {
