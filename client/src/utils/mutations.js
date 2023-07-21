@@ -31,6 +31,7 @@ export const SAVE_WORKOUT = gql`
       username
       email
       savedWorkouts {
+        _id
         name
         instructions
         category
@@ -47,11 +48,12 @@ export const DELETE_WORKOUT = gql`
       username
       email
       savedWorkouts {
+        _id
         name
         instructions
         category
         image
-      }
     }
   }
+}
 `;

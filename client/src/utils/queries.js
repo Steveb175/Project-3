@@ -7,6 +7,7 @@ export const QUERY_ME = gql`
             username
             email
             savedWorkouts {
+                _id
                 name
                 instructions
                 category
