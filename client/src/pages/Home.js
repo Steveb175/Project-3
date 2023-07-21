@@ -6,6 +6,7 @@ import { saveWorkoutIds, getSavedWorkoutIds } from "../utils/localStorage";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { SAVE_WORKOUT } from "../utils/mutations";
 import { QUERY_CATEGORIES, QUERY_CATEGORY } from "../utils/queries";
+import "./index.css";
 
 const Home = () => {
   const [showForm, setShowForm] = useState(false);
@@ -13,9 +14,11 @@ const Home = () => {
   const [searchInput, setSearchInput] = useState("");
   const [savedWorkoutIds, setSavedWorkoutIds] = useState(getSavedWorkoutIds());
 
-  const [getCategory, { loading: categoryLoading, data: data_category }] = useLazyQuery(QUERY_CATEGORY);
+  const [getCategory, { loading: categoryLoading, data: data_category }] =
+    useLazyQuery(QUERY_CATEGORY);
   const [saveWorkout, { error }] = useMutation(SAVE_WORKOUT);
-  const { loading: categoriesLoading, data: data_categories } = useQuery(QUERY_CATEGORIES);
+  const { loading: categoriesLoading, data: data_categories } =
+    useQuery(QUERY_CATEGORIES);
 
   // console.log(data_categories);
   // console.log(data_category);
@@ -60,22 +63,24 @@ const Home = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-
-              { data_categories?.categories.map((category) => (
-                 <Dropdown.Item
-                    key={category._id}
-                    value={category.name}
-                    onClick={() => getCategory({ variables: { name: category.name } })}>
-                    {category.name}
-                  </Dropdown.Item>
+              {data_categories?.categories.map((category) => (
+                <Dropdown.Item
+                  key={category._id}
+                  value={category.name}
+                  onClick={() =>
+                    getCategory({ variables: { name: category.name } })
+                  }
+                >
+                  {category.name}
+                </Dropdown.Item>
               ))}
             </Dropdown.Menu>
           </Dropdown>
         </Container>
       </div>
 
-        {/* Display the workouts from the selected category */}
-      <div>
+      {/* Display the workouts from the selected category */}
+      <div className="bg-dark pt-3 pb-3">
         <Container>
           <Row>
           {data_category?.category?.workouts.map(workout => (
@@ -102,9 +107,10 @@ const Home = () => {
               </Card>
             </Col>
           ))}
+
           </Row>
         </Container>
-       </div>
+      </div>
     </>
   );
 };
