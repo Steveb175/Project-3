@@ -7,12 +7,13 @@ import { QUERY_ME } from "../utils/queries";
 import { DELETE_WORKOUT } from "../utils/mutations";
 
 const Profile = () => {
-
   const userData = Auth.getProfile().data;
   const me = userData.username;
   // console.log(me);
   // console.log(userData);
-  const {loading: loadingData, data: dataMe} = useQuery(QUERY_ME, {variables: {username: me}});
+  const { loading: loadingData, data: dataMe } = useQuery(QUERY_ME, {
+    variables: { username: me },
+  });
   // console.log("dataMe", dataMe);
   // console.log("email", dataMe.me.email);
   // console.log("savedWorkouts", dataMe.me.savedWorkouts);
@@ -20,9 +21,9 @@ const Profile = () => {
   const [deleteWorkout, { error }] = useMutation(DELETE_WORKOUT);
 
   // create function that accepts the book's mongo _id value as param and deletes the workout from the database
-  const handleDeleteWorkout = async workoutId => {
-  console.log("workoutId", workoutId);
-    
+  const handleDeleteWorkout = async (workoutId) => {
+    console.log("workoutId", workoutId);
+
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -32,10 +33,10 @@ const Profile = () => {
 
     try {
       const { data } = await deleteWorkout({
-        variables: { workoutId }
+        variables: { workoutId },
       });
 
-    // upon success, remove workout's id from localStorage
+      // upon success, remove workout's id from localStorage
       removeWorkoutId(workoutId);
     } catch (err) {
       console.error(err);
@@ -45,14 +46,14 @@ const Profile = () => {
   return (
     <>
       <div className="text-light bg-dark pt-5">
-        <Container>
-          <h2>Welcome, {me} !</h2>
+        <Container className="text-center">
+          <h2>Welcome, {me}!</h2>
           <h3>Here's a list of your saved workouts:</h3>
         </Container>
       </div>
 
-        {/* Display the saved workouts */}
-      <div>
+      {/* Display the saved workouts */}
+      <div className="bg-dark">
         <Container>
           <h2 className="pt-5">
             {dataMe?.me.savedWorkouts.length
@@ -62,22 +63,36 @@ const Profile = () => {
               : "You have no saved workouts!"}
           </h2>
           <Row>
-            {dataMe?.me.savedWorkouts?.map(workout => {
-              return(
+            {dataMe?.me.savedWorkouts?.map((workout) => {
+              return (
                 <Col key={workout._id} md="4">
                   <Card border="dark">
-                    {workout.image ? <Card.Img src={workout.image} alt={`The cover for ${workout.name}`} variant="top" /> : null}
+                    {workout.image ? (
+                      <Card.Img
+                        src={workout.image}
+                        alt={`The cover for ${workout.name}`}
+                        variant="top"
+                      />
+                    ) : null}
                     <Card.Body>
-                      <Card.Title>{workout.name}</Card.Title>
-                      <p className="small">Category: {workout.category}</p>
-                      <Card.Text>{workout.instructions}</Card.Text> 
-                      <Button className="btn-block btn-danger" onClick={() => handleDeleteWorkout(workout._id)}> Delete this Workout! </Button>
+                      <Card.Title className="text-center">
+                        {workout.name}
+                      </Card.Title>
+                      <p className="small"> {workout.category}</p>
+                      <Card.Text>{workout.instructions}</Card.Text>
+                      <Button
+                        className="btn-block btn-danger"
+                        onClick={() => handleDeleteWorkout(workout._id)}
+                      >
+                        {" "}
+                        Delete this Workout!{" "}
+                      </Button>
                     </Card.Body>
                   </Card>
                 </Col>
               );
             })}
-          </Row>  
+          </Row>
         </Container>
       </div>
     </>
