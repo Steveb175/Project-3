@@ -4,8 +4,8 @@ import "./style.css";
 
 const Footer = () => {
   return (
-    <footer className="text-center py-4 bg-dark text-white">
-      <div className="container">
+    <footer className="text-center py-4 bg-dark text-white footing">
+      <div className="container222">
         <p>Experiencing issues? Contact a developer through their GitHub:</p>
         <ul className="list-inline">
           <li className="list-inline-item">
