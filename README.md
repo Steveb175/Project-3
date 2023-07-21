@@ -3,13 +3,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Visuals
-![Homepage](/client/public/images/example.png)
+![Homepage](https://raw.githubusercontent.com/Steveb175/Workout-Customizer/main/client/public/images/example.PNG)
 
 ## Description
 Workout Customizer is an application that allows users to find workouts and save them to their profile for easy access later on. It will assist users while they are working out by having all of their workouts easily accessible on one page with clear instructions on how to safely and effectively perform each exercise.
 
 ## Table of Contents
-- [Workout Customizer](#workout-customizer)
+- [Workout Customizer :muscle:](#workout-customizer-muscle)
   - [Visuals](#visuals)
   - [Description](#description)
   - [Table of Contents](#table-of-contents)
